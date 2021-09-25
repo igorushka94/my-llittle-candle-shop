@@ -112,9 +112,9 @@ Control.system-ca-bundle
 GitHub.sublime-settings 
 
 # Visual Studio Code # 
-webcandleshop/.vscode
-*.vscode
-.vscode/* 
+webcandleshop/.vscode/
+.vscode/
+vscode/*
 .vscode/settings.json 
 .vscode/tasks.json 
 .vscode/launch.json 
