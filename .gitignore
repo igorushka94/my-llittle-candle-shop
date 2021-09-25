@@ -113,7 +113,7 @@ GitHub.sublime-settings
 
 # Visual Studio Code # 
 webcandleshop/.vscode
-.vscode/
+*.vscode
 .vscode/* 
 .vscode/settings.json 
 .vscode/tasks.json 
