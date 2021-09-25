@@ -1,0 +1,90 @@
+{% load static %}
+{% load bootstrap5 %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% bootstrap_messages %}
+        <link rel="shortcut icon" href="{% static 'home/title-icon-candle.svg' %}">
+        <link rel="stylesheet" type="text/css" href="{% static '/home/basic.css' %}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <title>{% block title %}Интернет-магазин{% endblock title %}</title>
+    </head>
+    <body>
+        <header>
+        {% block header %}
+            <div class="flex-block">
+                <div class="test-item-home">
+                    <a href="/" class="product-href"><img src="{% static 'home/house.svg'%}" class="img-fluid" width="64" height="64">
+                    <p>Главная</p>
+                    </a>
+                </div>
+                <div class="test-item-title">
+                    <h1>CandleKraft - магазин крафтовых свечей</h1>
+                </div>
+                {% if user.is_authenticated %}
+                    <div class="test-item-auth">
+                        <a href="../accounts/profile" class="product-href">
+                            <img src="{% static 'home/user.svg' %}" class="img-fluid" width="64" height="64"> 
+                            <p>Мой профиль</p>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="test-item-auth">
+                        <a href="/register/" class="product-href">
+                            <img src="{% static 'home/register.svg' %}" class="img-fluid" width="64" height="64">
+                            <p>Регистрация</p>
+                        </a>
+                    </div>
+                {% endif %}
+                    <div class="test-item-cart">
+                        <a href="/cart/" class="product-href">
+                            <img src="{% static 'home/shopping-cart.svg' %}" class="img-fluid" width="64" height="64">
+                            <p>Корзина</p>
+                        </a>
+                    </div>  
+            </div> 
+        {% endblock header %}
+        </header>
+        {% block nav %}
+        <ul class="list-group">
+            {% for category in categories %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{{ category.slag }}" class="product-href">{{ category.name }}</a>
+                    <span class="badge bg-primary rounded-pill">{{ category.product__count }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+        {% endblock nav %}
+        {% block content %}
+        {% endblock content %} 
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+    </body>
+    <footer>
+        {% block footer %}
+            <div class="footer-container">
+                <div class="footer-container-item-1">
+                    <b>О компании</b>
+                    <br clear="all" /><i>ООО my_Company</i>
+                </div>
+                <div class="footer-container-item-2">
+                    <b>Услуги</b>
+                    <br clear="all" /><i>Сайтостроение</i>
+                    <br clear="all" /><i>3D печать</i>
+                    <br clear="all" /><i>Доставка</i>   
+                </div>
+                <div class="footer-container-item-3">
+                    <b>Контакты</b>
+                    <br clear="all" /><i>email: igor.pereloma61@gmail.com</i>
+                    <br clear="all" /><i>тел.: +7-999-978-71-84</i>
+                </div>
+            </div>
+        {% endblock footer %}
+    </footer>
+</html>

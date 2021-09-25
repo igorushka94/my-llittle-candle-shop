@@ -1,0 +1,52 @@
+{% load static %}
+{% load bootstrap5 %}
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content = "text/html; charset=utf-8">
+		{% bootstrap_css %}
+		{% bootstrap_javascript %}
+		{% bootstrap_messages %}
+		<link rel="shortcut icon" href="{% static 'title-icon-candle.svg' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	</head>
+	<title>Интернет-магазин</title>
+	<body>
+		<!--header-->
+		<header class="header">
+			<div class="header-icon">
+				<img src="{% static 'home/candles.svg'%}" width="64" height="64">
+			</div>
+			<div class="header-text">
+				<h1>CandleKraft - магазин крафтовых свечей</h1>
+			</div>
+			<div class="header-cart">
+				<a href="/register/"><img src="{% static 'home/register.svg' %}" width="64" height="64">Регистрация</a>
+				<a href="/cart/"><img src="{% static 'home/shopping-cart.svg' %}" width="64" height="64">Корзина</a>
+			</div>
+		</header>
+		<!--end header-->
+		<div class="container">
+			<ul class="list-group">
+				{% for product in products%}
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					<a href=" " class="product-href"><h4>{{ product.title }}</h4></a>
+					<span class="badge bg-primary rounded-pill">{{ product.count_candle }}</span>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<footer class="footer">
+			Футер	
+		</footer>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+		<script>
+			window.onload = function changeURL(){
+				document.getElementsByClassName('.product-href').href='candles/';
+			}
+		</script>
+	</body>
+</html>

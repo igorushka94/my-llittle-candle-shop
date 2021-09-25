@@ -1,0 +1,82 @@
+{% load static %}
+{% load bootstrap5 %}
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content = "text/html; charset=utf-8">
+		{% bootstrap_css %}
+		{% bootstrap_javascript %}
+		{% bootstrap_messages %}
+		<link rel="shortcut icon" href="{% static 'title-icon-candle.svg' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	</head>
+	<title>Интернет-магазин</title>
+	<body>
+		<!--header-->
+		<header class="header">
+			<div class="header-icon">
+				<img src="{% static 'home/candles.svg'%}" width="64" height="64">
+			</div>
+			<div class="header-text">
+				<h1>CandleKraft - магазин крафтовых свечей</h1>
+			</div>
+			<div class="header-cart">
+				<a href="/register/"><img src="{% static 'home/register.svg' %}" width="64" height="64">Регистрация</a>
+				<a href="/cart/"><img src="{% static 'home/shopping-cart.svg' %}" class="bascket" width="64" height="64">Корзина</a>
+			</div>
+		</header>
+		<!--end header-->
+		<div class="container">
+			<ul class="row">
+				{% for silicon in silicons %}
+				<div class="card" style="width: 20rem;">
+					<img src="{{MEDIA_URL}}{{ silicon.image }}" class="card-img-top" alt="свеча">
+					<div class="card-body text-center">
+						<h5 class="card-title">{{ silicon.title }}</h5>
+						<p class="card-text">{{ silicon.content }}</p>
+						<p>Цена: {{ silicon.price }} руб.</p>
+						<div class="quantity">
+							<div class="wrapper">
+								<button class="plus" type="button">+</button>
+								<input id="number" class="js-number" type="number" readonly="readonly" name="number" value="1" min="1">
+								<button class="minus" type="button">-</button>
+							</div>
+						</div>
+						<input type="button" value="+ в корзину" class="btn btn-primary">
+					</div>
+				</div>
+			{% endfor %}
+			</div>
+			{{ sql_queries }}
+		</div>
+		<footer class="footer">	
+			Футер	
+		</footer>
+		<script>
+			$('.btn btn-primary').on('click', function(){
+
+				var that = $(this).closest('.card').find('img');
+				var bascket = $(".bascket");
+				var w = that.width();
+
+				that.clone()
+					.css({'width' : w,
+					'position' : 'absolute',
+					'z-index' : '9999',
+					top: that.offset().top,
+					left:that.offset().left})
+					.appendTo("body")
+					.animate({opacity: 0.05,
+						left: bascket.offset()['left'],
+						top: bascket.offset()['top'],
+						width: 20}, 1000, function() {	
+							$(this).remove();
+						});
+				});
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+	</body>
+</html>
