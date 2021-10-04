@@ -15,6 +15,7 @@ urlpatterns = [
     path('instrumenst/', views.show_instrumenst, name='instrumenst'),
     path('equipment/', views.show_equipment, name='equipment'),
     path('candle_molds/', views.show_candle_molds, name='candle_molds'),
+    path('candle/add_product/', views.add_product, name='add_product'),
     path('candle/', views.show_candle, name='candle'),
     path('candleholder/', views.show_candleholder, name='candleholder'),
     path('delivery/', views.delivery, name='delivery'),

@@ -2,11 +2,11 @@
 
 
 {% block content %}
-	<div class="container">
+	<div class="container mt-2">
 		<div class="row">
 			{% for product in products %}
-			<div class="card" style="width: 20rem;">
-				<img src="{{MEDIA_URL}}{{ product.image }}" width="260" height="260" class="card-img-top" alt="свеча">
+			<div class="card border-warning mx-1 my-1" style="width: 20rem;">
+				<img src="{{MEDIA_URL}}{{ product.image }}" width="260" height="260" class="card-img-top mt-3" alt="свеча">
 				<div class="card-body text-center">
 					<h5 class="card-title">{{ product.title }}</h5>
 					<p class="card-text">{{ product.description }}</p>
@@ -25,5 +25,37 @@
 			</div>
 			{% endfor %}
 		</div>
+		<button type="button" class="btn btn-primary mt-3 mb-3">Ещё товары</button>
 	</div>
+	<script>
+		let btn_more = document.querySelector('.btn.btn-primary.mt-3.mb-3')
+		const options = {
+			headers: {
+				Accept: 'application/json',
+				'Accept-Languaage': 'ru-RU'
+			}
+		};
+
+		function get_more_product() {
+			// let new_request = new XMLHttpRequest;
+			// console.log(new_request)
+			method = "GET";
+			url = "{% url 'home:candleholder' %}";
+			
+			// new_request.open(method, url);
+			// new_request.setRequestHeader('X-REQUESTED_WITH', 'XMLHttpRequest');
+			// new_request.send();
+			window.fetch(url, {method: 'get', Accept: 'application/json'})
+		}
+
+		btn_more.addEventListener('click', () => {
+			get_more_product()
+		})
+
+		let myStorage = window.localStorage;
+		let count_product_in_cart = document.querySelector('.count-cart').innerHTML
+
+		myStorage.setItem('count_product', count_product_in_cart)
+
+	</script>
 {% endblock content %}

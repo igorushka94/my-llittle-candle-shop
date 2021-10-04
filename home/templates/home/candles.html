@@ -1,12 +1,13 @@
 {% extends  "layout/basic.html"%}
+{% load static %}
 
 
 {% block content %}
-	<div class="container">
+	<div class="container mt-2">
 		<div class="row">
 			{% for product in products %}
-			<div class="card" style="width: 20rem;">
-				<img src="{{MEDIA_URL}}{{ product.image }}" width="260" height="260" class="card-img-top" alt="свеча">
+			<div class="card border-warning mx-1 my-1" style="width: 20rem;">
+				<img src="{{MEDIA_URL}}{{ product.image }}" width="260" height="260" class="card-img-top mt-3"" alt="свеча">
 				<div class="card-body text-center">
 					<h5 class="card-title">{{ product.title }}</h5>
 					<p class="card-text">{{ product.description }}</p>
@@ -20,11 +21,11 @@
 								<span class="plus-ico"></span>
 							</div>
 						</div>
-					<a href="#" class="btn btn-primary">+ в корзину</a>
+					<button class="btn btn-primary">Добавить в корзину</button>
 				</div>
 			</div>
 			{% endfor %}
-			<div class="box">
+			<!-- <div class="box">
 				<div class="box-holder">
 					<div class="wrapper">
 						<input type="button" class="minus">
@@ -37,8 +38,8 @@
 				<div class="box-price">
 					<span data-bind="">112РУб</span>
 				</div>
-				<a data-bind="click: add2cart.bind($data, $element)" class="box-cart">+ в корзину</a>
-			</div>
+				<a data-bind="click: add2cart.bind($data, $element)" class="box-cart">Добавить в корзину</a>
+			</div> -->
 		</div>
 	</div>
 	<div>
@@ -52,45 +53,7 @@
 		<a href="?page={{ page.next_page_number }}">&gt;</a>
 		{% endif %}
 	</div>
-	<!-- <script>
-		function countFunc(count) {
-			let btnMinus = document.querySelector('input[class="plus"') 
-			let btnPlus = document.querySelector('input[class="minus"') 
-			let item = document.querySelector('input[class="amount"')
-			let fieldValue = parseFloat(field.value, 10);
-
-			btnMinus.addEventListener('click', function(){
-				if (fieldValue > 1) {
-					fieldValue--;
-					field.value = fieldValue;
-				} else {
-					return 1;
-				}
-			});
-
-			btnPlus.addEventListener('click', function() {
-				fieldValue++;
-				field.value = fieldValue;
-			});
-		}
-		let counts = document.querySelectorAll('div[class="container"');
-		counts.forEach(countFunc);
-		var btnMinus = document.querySelector('a[href="?page2"');
-		let btnMinus = document.querySelector('input[class="plus"') 
-		let btnPlus = document.querySelector('input[class="minus"') 
-		let item = document.querySelector('input[class="amount"').tagName
-		document.addEventListener('click', function(){
-			
-		})
-	var b = document.querySelector('a[data-bind="test"')
-	b.addEventListener('click', function(){
-		var request = new XMLHttpRequest();
-		request.open('GET', '/?page=2');
-		request.setRequestHeader("Content-Type", "text/plain")
-		request.send(null)
-	})
-		function next(){
-			alert('asd')
-		}
-	</script> -->
+	<script src="{% static 'home/main.js' %}">
+		
+	</script>
 {% endblock content %}

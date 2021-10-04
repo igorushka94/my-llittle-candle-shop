@@ -1,17 +1,82 @@
+{% load static %}
+{% load bootstrap5 %}
+
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% bootstrap_messages %}
+        <link rel="shortcut icon" href="{% static 'home/title-icon-candle.svg' %}">
+        <link rel="stylesheet" type="text/css" href="{% static '/accounts/profile.css' %}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Мой профиль</title>
 </head>
 <body>
-    {% if user.is_authenticated %}
-        <p>{{ user.username }}</p>
-    {% endif %}
-    <p>Добрый день! {{ user.username }}</p>
-     ТУт скоро будет твой личный кабинет
-     <p><a href="/">Главная</a></p>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm .center-block" style="text-align: center;">
+                {% if photo %}
+                <img src="{{ MEDIA_URL }}{{ photo }}" class="img-thumbnail" alt="фото профиля" width="250" height="250">
+                {% else %}
+                <img src="{% static 'home/user.svg' %}" class="img-thumbnail" alt="фото профиля" width="250" height="250">
+                {% endif %}
+                <p><a href="#" id="photo_insert" >Изменить фото</a></p>
+                <form action="{% url 'accounts:add_user_photo' %}" method="POST" id="file_photo" enctype="multipart/form-data" hidden>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <p class="mt-3"><input type="file" multiple></p>
+                    <p><button type="submit">Загрузить</button></p>
+                    <p><input id="delete_photo" type="button" value="Удалить фото"></p>
+                </form>
+            </div>
+            <div class="col-sm">
+                <div class="personal">
+                    <div class="personal-item">
+                        Персональная информация
+                        <a href="#">Редактировать</a>
+                    </div>
+                </div>
+                <p class="mt-3">Имя: <span id="fname">{{ fname }}</span></p>
+                <p>Фамилия: <span id="lname">{{ lname }}</span></p>
+                <p>Ваш логин: <span id="username">{{ user }}</span></p>
+                <p>email: <span id="email">{{ email }}</span></p>
+                <p>Телефон: <span id="phone">{{ phone }}</span></p>
+                <p>Адрес: <span id="addr">{{ address }}</span></p>
+            </div>
+        </div>
+    </div>
+    <a href="/">Главная</a>
+    <a href="{% url 'accounts:logout' %}">Выйти</a>
+    <a href="{% url 'cart:show_cart' %}">Моя корзина</a>
+    <script>
+        let button = document.getElementById('photo_insert');
+        let url = "{% url 'accounts:delete_photo_in_account' %}";
+        let buttonPhotoDelete = document.getElementById('delete_photo');
+        const ajax = new XMLHttpRequest;
+
+
+        button.addEventListener('click', function() {
+            let formUpload = document.getElementById('file_photo')
+            if (formUpload.hidden === true){
+                formUpload.hidden = false
+                button.innerHTML = 'Отменить'
+            }
+            else if (formUpload.hidden === false){
+                formUpload.setAttribute('hidden', true)
+                button.innerHTML = 'Изменить фото'
+            }
+        })
+
+        buttonPhotoDelete.addEventListener('click', function() {
+            ajax.open('GET', url)
+            ajax.send()
+        })
+
+    </script>
 </body>
 </html>

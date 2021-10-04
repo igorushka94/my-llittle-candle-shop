@@ -67,7 +67,7 @@
           <td>{{ product.name }}</td>
           <td>{{ item.quantity }}</td>
           <td>
-            <a href="{% url "cart:cart_remove" product.id %}">Remove</a>
+            <a href="#">Remove</a>
           </td>
           <td class="num">${{ item.price }}</td>
           <td class="num">{{ item.totat_price }}</td>
@@ -81,7 +81,7 @@
     </tr>
     </tbody>
     <p class="text-right">
-      <a href="{% url "shop:product_list" %}" class="button light">Continue shopping</a>
+      <a href="#" class="button light">Continue shopping</a>
       <a href="#" class="button">Checkout</a>
     </p>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>

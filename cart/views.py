@@ -1,3 +1,4 @@
+import cart
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST, require_http_methods
 
@@ -30,6 +31,9 @@ def cart_detail(request):
     """Отображает корзину основываясь на данных сессии, сохранённых в request.session"""
     cart = Cart(request)
     return render(request, 'cart/detail.html', {'cart': cart})
+
+def show_cart(request):
+    return render(request, 'cart/detail.html')
 
 # class CartTemplateView(TemplateView):
 #     model = Cart

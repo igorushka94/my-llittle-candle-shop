@@ -1,13 +1,23 @@
+from datetime import datetime
 from django.views import View
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest
 from django.core.serializers import serialize
 from django.contrib.auth.models import User
+from django.views.generic.detail import DetailView
 
 
 from .forms import UserRegistrationForm
 from .models import Category, Product
+
+
+class ProductDetailView(DetailView):
+	model = Product
+
+	def get_context_data(self, *args, **kwargs):
+		context = super().get_context_data(**kwargs)
+		pass
 
 
 def prodcut_list(request):
@@ -67,7 +77,9 @@ def show_candle(request):
 
 def show_candleholder(request):
 	"""Отображает страницу подсвечников, в фильтре категория по id=2(подсвечники) таблицы Category"""
-	products = Product.objects.filter(category=2)
+	count = 0
+	products = Product.objects.filter(category=2)[:4]
+	count += len(products)
 	context = {'products': products}
 	return render(request, 'home/candleholder.html', context=context)
 
@@ -120,3 +132,11 @@ def validate_username(request):
 	}
 	return JsonResponse(response)
 
+
+def add_product(request):
+	if request.method == 'GET':
+		data = {
+			'text': request.GET['text'],
+			'num': request.GET['num'],
+		}
+		print(data)

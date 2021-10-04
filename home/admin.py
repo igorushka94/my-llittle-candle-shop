@@ -46,31 +46,31 @@ from .models import Category, Product, Cart, CardProduct, Order, CartProduct, Cu
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slag')
+    list_display = ('id', 'name', 'slag')
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('category', 'title', 'description', 'price')
+    list_display = ('id', 'category', 'title', 'description', 'price')
 
 
 class CardProductAdmin(admin.ModelAdmin):
-    list_display = ('product', )
+    list_display = ('id', 'product', )
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('card_product', 'date')
+    list_display = ('id', 'card_product', 'date')
 
 
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('owner', 'total_products', 'final_price')
+    list_display = ('id', 'owner', 'total_products', 'final_price')
 
 
 class CartProductAdmin(admin.ModelAdmin):
-    list_display = ('user', 'product', 'qty', 'final_price')
+    list_display = ('id', 'user', 'product', 'qty', 'final_price')
 
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone', 'address')
+    list_display = ('id', 'user', 'phone', 'address')
 
 
 class ClientAdmin(admin.ModelAdmin):
