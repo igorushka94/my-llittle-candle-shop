@@ -78,6 +78,7 @@ def show_candle(request):
 def show_candleholder(request):
 	"""Отображает страницу подсвечников, в фильтре категория по id=2(подсвечники) таблицы Category"""
 	count = 0
+	print(request.is_ajax())
 	products = Product.objects.filter(category=2)[:4]
 	count += len(products)
 	context = {'products': products}
@@ -127,8 +128,9 @@ def register(request):
 def validate_username(request):
 	"""Проверка доступности логина"""
 	username = request.GET.get('username', None)
+	ask = User.objects.filter(username__iexact=username).exists()
 	response = {
-		'is_taken': User.objects.filter(username__iexact=username).exists()
+		'is_taken': ask
 	}
 	return JsonResponse(response)
 

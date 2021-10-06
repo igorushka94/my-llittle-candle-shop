@@ -24,13 +24,19 @@
 #         found = resolve('/')
 #         self.assertEqual(found.func, index)
 
-#     # def test_home_page_returns_correct_html(self):
-#     #     """  Тест: домашняя страница возвращает правильный html """
-#     #     request = HttpRequest
-#     #     response = index(request)
-#     #     self.assertTrue(response)
-#     #     self.assertIn('<title>Интернет-магазин</title>')
-#     #     self.assertTrue(html.endswith('</html>'))
+#     def test_home_page_returns_correct_html(self):
+#         """  Тест: домашняя страница возвращает правильный html """
+#         request = HttpRequest
+#         response = index(request)
+#         self.assertTrue(response)
+#         self.assertIn('<title>Интернет-магазин</title>')
+#         self.assertTrue(html.endswith('</html>'))
+
+
+#         def test_can_save_a_POST_request(self):
+#         """ тест: можно сохранить post-запрос """
+#         response = self.client.post('/', data={'item_text': 'A new list item'})
+#         self.assertIn('A new list item', response.content.decode())
 
 
 # if __name__ == "__main__":

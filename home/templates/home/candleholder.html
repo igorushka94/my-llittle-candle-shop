@@ -1,4 +1,5 @@
 {% extends  "layout/basic.html"%}
+{% load static %}
 
 
 {% block content %}
@@ -20,42 +21,61 @@
 								<span class="plus-ico"></span>
 							</div>
 						</div>
-					<a href="#" class="btn btn-primary">+ в корзину</a>
+					<a href="#" class="btn btn-primary">Добавить в корзину</a>
 				</div>
 			</div>
 			{% endfor %}
 		</div>
-		<button type="button" class="btn btn-primary mt-3 mb-3">Ещё товары</button>
+		<button class="bubbly-button">Ещё товары</button>
 	</div>
-	<script>
-		let btn_more = document.querySelector('.btn.btn-primary.mt-3.mb-3')
-		const options = {
-			headers: {
-				Accept: 'application/json',
-				'Accept-Languaage': 'ru-RU'
-			}
-		};
+	<script src="{% static 'home/main copy.js' %}">
+		// let btn_more = document.querySelector('.btn.btn-primary.mt-3.mb-3')
+		// const options = {
+		// 	headers: {
+		// 		Accept: 'application/json',
+		// 		'Accept-Languaage': 'ru-RU'
+		// 	}
+		// };
 
-		function get_more_product() {
-			// let new_request = new XMLHttpRequest;
-			// console.log(new_request)
-			method = "GET";
-			url = "{% url 'home:candleholder' %}";
+		// function get_more_product() {
+		// 	let new_request = new XMLHttpRequest;
+		// 	console.log(new_request)
+		// 	method = "GET";
+		// 	url = "{% url 'home:candleholder' %}";
 			
-			// new_request.open(method, url);
-			// new_request.setRequestHeader('X-REQUESTED_WITH', 'XMLHttpRequest');
-			// new_request.send();
-			window.fetch(url, {method: 'get', Accept: 'application/json'})
-		}
+		// 	new_request.open(method, url);
+		// 	new_request.setRequestHeader('X-REQUESTED_WITH', 'XMLHttpRequest');
+		// 	new_request.send();
+		// 	window.fetch(url, {method: 'get', Accept: 'application/json'})
+		// }
 
-		btn_more.addEventListener('click', () => {
-			get_more_product()
-		})
+		// btn_more.addEventListener('click', () => {
+		// 	get_more_product()
+		// })
 
-		let myStorage = window.localStorage;
-		let count_product_in_cart = document.querySelector('.count-cart').innerHTML
+		// let myStorage = window.localStorage;
+		// let count_product_in_cart = document.querySelector('.count-cart').innerHTML
 
-		myStorage.setItem('count_product', count_product_in_cart)
-
+		// myStorage.setItem('count_product', count_product_in_cart)
+		
+	</script>
+	<script>
+	let btn_more_product = document.querySelector('.bubbly-button')
+	const url = "{% url 'home:candleholder' %}";
+	
+	let user = {
+		name: 'John',
+		surname: 'Smith'
+	};
+	btn_more_product.addEventListener('click', () => {
+		$.ajax({ 
+		url: url, 
+		method: "GET", // Что бы воспользоваться POST методом, меняем данную строку на POST   
+		data: {"id_product": 1,"qty_product": 2},
+			success: function(data) {
+				console.log(data);
+			} 
+});
+	})
 	</script>
 {% endblock content %}
