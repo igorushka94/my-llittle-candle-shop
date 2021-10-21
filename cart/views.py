@@ -1,6 +1,6 @@
-import cart
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST, require_http_methods
+from django.http import HttpResponse
 
 from home.models import Product
 from .cart import Cart
@@ -34,6 +34,11 @@ def cart_detail(request):
 
 def show_cart(request):
     return render(request, 'cart/detail.html')
+  
+
+def create_order(request):
+    data = request.POST
+    pass
 
 # class CartTemplateView(TemplateView):
 #     model = Cart

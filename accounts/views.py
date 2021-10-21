@@ -1,12 +1,12 @@
-import re
-from django import forms
 from django.shortcuts import redirect, render
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.generic.edit import UpdateView
+from django.views.generic.base import View
 
 from home.models import Customer
-from .forms import ImgForm
+from .forms import ImgForm, UserModifyForm
 
 
 class MyLogoutView(LogoutView):
@@ -18,19 +18,19 @@ class MyLogoutView(LogoutView):
         return context
 
 
-def get_to_user_profile(request):
-    username = request.user
-    user = User.objects.get(username__exact=username)
-    customer = user.customer_set.get(user=username)
-    context = {
-        'fname': user.first_name,
-        'lname': user.last_name,
-        'email': user.email,
-        'phone': customer.phone,
-        'address': customer.address,
-        'photo': customer.image
-    }
-    return render(request, template_name='accounts/profile.html', context=context)
+# def get_to_user_profile(request):
+#     username = request.user
+#     user = User.objects.get(username__exact=username)
+#     customer = user.customer_set.get(user=username)
+#     context = {
+#         'fname': user.first_name,
+#         'lname': user.last_name,
+#         'email': user.email,
+#         'phone': customer.phone,
+#         'address': customer.address,
+#         'photo': customer.image
+#     }
+#     return render(request, template_name='accounts/profile.html', context=context)
 
 
 def delete_user_data(request):
@@ -62,3 +62,33 @@ def delete_photo_in_account(request):
        customer.image = ''
        customer.save()
     return render(request, 'accounts/profile.html')
+
+
+class ProfileView(View):
+    
+    def get(self, request):
+        username = request.user
+        user = User.objects.get(username__exact=username)
+        customer = user.customer_set.get(user=username)
+        context = {
+            'fname': user.first_name,
+            'lname': user.last_name,
+            'email': user.email,
+            'phone': customer.phone,
+            'address': customer.address,
+            'photo': customer.image
+        }
+        return render(request, template_name='accounts/profile.html', context=context)
+
+    def post(self, request):
+        username = request.user
+        data = request.POST
+        customer = Customer.objects.get(user=username)
+        return render(request, template_name='accounts/profile.html', context=context)
+
+
+    def put(self, request):
+        username = request.user
+        customer = Customer.objects.get(user=username)
+        return render(request, template_name='accounts/profile.html', context=context)
+

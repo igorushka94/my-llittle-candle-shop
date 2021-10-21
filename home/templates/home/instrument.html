@@ -5,13 +5,13 @@
 {% block content %}
 	<div class="container mt-2">
 		<div class="row">
-			{% for product in products %}
-			<div class="card border-warning mx-1 my-1" style="width: 20rem;" product-id="{{ product.id }}">
-				<img src="{{MEDIA_URL}}{{ product.image }}" width="260" height="260" class="card-img-top mt-3" alt="свеча">
+			{% for instrument in instruments %}
+			<div class="card border-warning mx-1 my-1" product-id="{{ instrument.id }}" style="width: 20rem;">
+				<img src="{{MEDIA_URL}}{{ instrument.image }}" width="260" height="260" class="card-img-top mt-3" alt="свеча">
 				<div class="card-body text-center">
-					<h5 class="card-title">{{ product.title }}</h5>
-					<p class="card-text">{{ product.description }}</p>
-					<p>Цена: {{ product.price }} руб.</p>
+					<h5 class="card-title">{{ instrument.title }}</h5>
+					<p class="card-text">{{ instrument.description }}</p>
+					<p>Цена: {{ instrument.price }} руб.</p>
 						<div class="quantity">
 							<div class="wrapper">
 								<input type="button" class="minus">
@@ -21,14 +21,11 @@
 								<span class="plus-ico"></span>
 							</div>
 						</div>
-					<button class="btn btn-primary">Добавить в корзину</a>
+					<button class="btn btn-primary">Добавить в корзину</button>
 				</div>
 			</div>
 			{% endfor %}
 		</div>
-		{% if products.count >= 2 %}
-			<button id="load-more">Ещё товары</button>
-		{% endif %}
 	</div>
 	<script src="{% static 'home/main.js' %}"></script>
 {% endblock content %}

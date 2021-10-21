@@ -1,15 +1,23 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core import validators
-from django.db import models
-from django.db.models import fields
 from home.models import Customer
+from django.contrib.auth.forms import AuthenticationForm
 
 
 class UserModifyForm(forms.ModelForm):
-    fname = forms.CharField(label='Имя', help_text='Введите имя')
-    lname = forms.CharField(label='Фамилия', help_text='Введите фамилию')
-    email = forms.EmailField(label='Новый Email', help_text='Введите новый email')
+    fname = forms.CharField(
+        label='Имя', 
+        help_text='Введите имя'
+        )
+    lname = forms.CharField(
+        label='Фамилия', 
+        help_text='Введите фамилию'
+        )
+    email = forms.EmailField(
+        label='Новый Email',
+        help_text='Введите новый email'
+        )
     
 
     class Meta:

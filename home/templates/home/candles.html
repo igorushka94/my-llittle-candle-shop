@@ -6,8 +6,8 @@
 	<div class="container mt-2">
 		<div class="row">
 			{% for product in products %}
-			<div class="card border-warning mx-1 my-1" style="width: 20rem;">
-				<img src="{{MEDIA_URL}}{{ product.image }}" width="260" height="260" class="card-img-top mt-3"" alt="свеча">
+			<div class="card border-warning mx-1 my-1"  product-id="{{ product.id }}" style="width: 20rem;">
+				<img src="{{MEDIA_URL}}{{ product.image }}" width="260" height="260" class="card-img-top mt-3" alt="свеча">
 				<div class="card-body text-center">
 					<h5 class="card-title">{{ product.title }}</h5>
 					<p class="card-text">{{ product.description }}</p>
@@ -38,7 +38,5 @@
 		<a href="?page={{ page.next_page_number }}">&gt;</a>
 		{% endif %}
 	</div>
-	<script src="{% static 'home/main.js' %}">
-		
-	</script>
+	<script src="{% static 'home/js/main.js' %}"></script>
 {% endblock content %}

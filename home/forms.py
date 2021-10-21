@@ -1,13 +1,12 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import CartProduct
 
 
 class UserRegistrationForm(forms.ModelForm):
 	""" Модельная форма для пользователей, включены только поля username, first_name и email.
 		Они будут валидироваться в соответствии с типом полей модели.
 		Добавлены 2 поля, password и password2, для задания и подтверждения пароля."""
-	password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
+	password = forms.CharField(label='Пароль', min_length=8, widget=forms.PasswordInput)
 	# label - задаёт надписи для полей формы. Словарь 
 	# widget - позволяет задать элемент управления, которым будет представляться на вэб-странице поле модели
 	password2 = forms.CharField(label='Повторите пароль', widget=forms.PasswordInput)
@@ -23,14 +22,6 @@ class UserRegistrationForm(forms.ModelForm):
 			# Если пароли отличаются то будет возвращена ошибка
 			raise forms.ValidationError('Пароли не совпадают')
 		return cd['password2']
-	
-
-class CartProductForm(forms.ModelForm):
-	pass
-
-
-
-
 
 
 # class CandleForm(forms.ModelForm):

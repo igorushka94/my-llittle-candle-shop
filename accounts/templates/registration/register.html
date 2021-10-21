@@ -44,14 +44,13 @@
       <img src="{% static 'home/candle_login.png' %}">
       <h1 class="h3 mb-3 font-weight-normal">Регистрация</h1>
       <p>Пожалуйста, зарегистрируйтесь, используя следующую форму:</p>
-      <form action="." method="post" class="form-singin">
+      <form action="{% url 'home:register' %}" method="post" class="form-singin">
         {% csrf_token %}
-        {% bootstrap_form user_form layout="inline" %}
-        <p></p>
-        <p>{% bootstrap_button "Создать аккаунт" button_type="submit" button_class="btn btn-primary btn-lg btn-block" %}</p>
+        {% bootstrap_form user_form layout='inline' %}
+        <input type="submit" class="btn btn-primary btn-lg btn-block mt-3" value="Создать аккаунт">
       </form>
       <div class="container">
-        У вас уже есть аккаунт? <a href="/accounts/login">Войти</a>
+        У вас уже есть аккаунт? <a href="{% url 'accounts:login' %}">Войти</a>
       </div>
     </div>
   </div>

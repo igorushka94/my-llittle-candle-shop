@@ -7,8 +7,6 @@ from django import forms
 # from django.forms.forms import Form
 # from django.forms.widgets import Textarea
 
-# from home.models import Candle
-
 
 PRODUCT_QUANTITY_CHOICERS = [(i, str(i)) for i in range(1, 21)]
 

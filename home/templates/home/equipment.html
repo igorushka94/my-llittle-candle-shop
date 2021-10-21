@@ -1,0 +1,31 @@
+{% extends  "layout/basic.html"%}
+{% load static %}
+
+
+{% block content %}
+	<div class="container mt-2">
+		<div class="row">
+			{% for equipment in equipments %}
+			<div class="card border-warning mx-1 my-1" product-id="{{ equipment.id }}" style="width: 20rem;">
+				<img src="{{MEDIA_URL}}{{ equipment.image }}" width="260" height="260" class="card-img-top mt-3" alt="свеча">
+				<div class="card-body text-center">
+					<h5 class="card-title">{{ equipment.title }}</h5>
+					<p class="card-text">{{ equipment.description }}</p>
+					<p>Цена: {{ equipment.price }} руб.</p>
+						<div class="quantity">
+							<div class="wrapper">
+								<input type="button" class="minus">
+								<span class="minus-ico"></span>
+								<input class="amount" type="text" readonly="readonly" name="number" value="1">
+								<input type="button" class="plus">
+								<span class="plus-ico"></span>
+							</div>
+						</div>
+					<button class="btn btn-primary">Добавить в корзину</button>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	<script src="{% static 'home/main.js' %}"></script>
+{% endblock content %}

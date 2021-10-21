@@ -1,0 +1,32 @@
+{% extends  "layout/basic.html"%}
+{% load static %}
+
+
+{% block content %}
+	<div class="container mt-2">
+		<div class="row">
+			{% for silicon_mold in silicon_molds %}
+			<div class="card border-warning mx-1 my-1" product-id="{{ silicon_mold.id }}" style="width: 20rem;">
+				<img src="{{MEDIA_URL}}{{ silicon_mold.image }}" width="260" height="260" class="card-img-top mt-3" alt="свеча">
+				<div class="card-body text-center">
+					<h5 class="card-title">{{ silicon_mold.title }}</h5>
+					<p class="card-text">{{ silicon_mold.description }}</p>
+					<p>Цена: {{ silicon_mold.price }} руб.</p>
+						<div class="quantity">
+							<div class="wrapper">
+								<input type="button" class="minus">
+								<span class="minus-ico"></span>
+								<input class="amount" type="text" readonly="readonly" name="number" value="1">
+								<input type="button" class="plus">
+								<span class="plus-ico"></span>
+							</div>
+						</div>
+					<button class="btn btn-primary">Добавить в корзину</button>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	<script src="{% static 'home/js/main.js' %}">
+	</script>
+{% endblock content %}

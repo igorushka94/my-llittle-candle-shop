@@ -1,5 +1,9 @@
+from decimal import Decimal
+
 from django.contrib.auth import get_user_model
 from django.db import models
+
+from .logic import get_timestamp_path
 
 
 User = get_user_model()
@@ -14,14 +18,11 @@ User = get_user_model()
 # Покупатель
 # ********Конец***********
 
-def get_timestamp_path(isinstance, filename):
-    from datetime import datetime
-    from os.path import splitext
-
-    return '%s%s' % (datetime.now().timestamp(), splitext(filename)[1])
 
 class Category(models.Model):
-    """Категория"""
+    """
+    Категория
+    """
     name = models.CharField(max_length=255, verbose_name='Имя категории')
     slag = models.SlugField(unique=True)
 
@@ -34,7 +35,9 @@ class Category(models.Model):
 
     @staticmethod
     def count_product_in_categories():
-        """Подсчёт количества(позиций) товаров в каждой категории"""
+        """
+        Подсчёт количества(позиций) товаров в каждой категории
+        """
         from django.db.models import Count
 
         counts = Category.objects.annotate(Count('product'))
@@ -42,13 +45,19 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    """Продукт"""
-    category = models.ForeignKey(Category, verbose_name='Категория', on_delete=models.CASCADE)
+    """
+    Таблица Продукт, отношение 1 ко многим от Product к набору Category
+    """
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        verbose_name='Категория'
+        )
 
     title = models.CharField(max_length=255, verbose_name='Наименование')
     description = models.CharField(max_length=255, blank=True, verbose_name='Описание')
     available = models.BooleanField(default=True, verbose_name='В наличии')
-    image = models.ImageField(blank=True, verbose_name='Изображение')
+    image = models.ImageField(blank=True, upload_to=get_timestamp_path, verbose_name='Изображение')
     price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Цена')
 
     class Meta:
@@ -61,7 +70,9 @@ class Product(models.Model):
 
 
 class CardProduct(models.Model):
-    """Карточка продукта"""
+    """
+    Карточка продукта
+    """
     product = models.ForeignKey(Product, verbose_name='Карточка продукта', on_delete=models.CASCADE)
 
     class Meta:
@@ -70,58 +81,69 @@ class CardProduct(models.Model):
 
 
 class Order(models.Model):
-    """Заказ"""
-    card_product = models.OneToOneField('Cart', verbose_name='ID корзины', on_delete=models.CASCADE)
-
-    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата заказа')
+    """
+    Заказ
+    """
+    customer = models.ForeignKey('Customer', on_delete=models.CASCADE, verbose_name='Логин')
+    order_product = models.ManyToManyField(
+        Product,
+        through='OrderProduct',
+        through_fields=('order', 'product')
+    )
+    date_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания заказа')
+    date_update = models.DateTimeField(auto_now=True, verbose_name='Дата оформления заказа')
 
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
-        ordering = ['-date']
-        get_latest_by = '-date'
-
-
-class CartProduct(models.Model):
-    """Продукт в корзине""" 
-    user = models.ForeignKey('Customer', verbose_name='Покупатель', on_delete=models.CASCADE)
-    cart = models.ForeignKey('Cart', verbose_name='Корзина', on_delete=models.CASCADE, related_name='related_products')
-    product = models.ForeignKey(Product, verbose_name='Продукт', on_delete=models.CASCADE)
-
-    qty = models.PositiveIntegerField(default=1, verbose_name='Количество товара')
-    final_price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Общая цена')
-
-    class Meta:
-        verbose_name = 'Продукт в корзине'
-        verbose_name_plural = 'Продукты в корзине'
+        ordering = ['-date_create']
+        get_latest_by = ['-date_create']
 
     def __str__(self):
-        return f"Продукт {self.product.title}"
+        return f'Заказ № {self.id}, пользователя {self.customer.user.username}'
+
+
+class OrderProduct(models.Model):
+    """
+    ЗаказПродукт 
+    """
+    order = models.OneToOneField(
+        Order,
+        on_delete=models.CASCADE,
+        verbose_name='Заказ',
+        )
+
+    product = models.OneToOneField(
+        Product,
+        on_delete=models.CASCADE,
+        verbose_name='Товар', 
+       )
+
+    count = models.PositiveIntegerField(default=1, verbose_name='Количество товара')
+    final_price = models.DecimalField(max_digits=9, decimal_places=2, blank=True, verbose_name='Общая цена')
+
+    class Meta:
+        verbose_name = 'Заказ продукт'
+        verbose_name_plural = 'Заказы продукты'
 
     def calculate_final_price(self):
-        final_price = self.qty * self.product.price
-        return final_price
+        self.final_price = self.product.price * self.count
+        return self.final_price
 
-
-class Cart(models.Model):
-    """Корзина"""
-    owner = models.ForeignKey('Customer', verbose_name='Владелец', on_delete=models.CASCADE)
-    products = models.ManyToManyField(CartProduct, blank=True, verbose_name='Товары в корзине', related_name='related_cart')
-
-    total_products = models.PositiveIntegerField(default=0, verbose_name='Общее количество товаров')
-    final_price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Общая цена')
-
-    class Meta:
-        verbose_name = 'Корзина'
-        verbose_name_plural = 'Корзины'
-
-    def __str__(self):
-        return str(self.id)
+    def save(self, *args, **kwargs):
+        self.final_price = self.calculate_final_price()
+        super().save(*args, **kwargs)
 
 
 class Customer(models.Model):
-    """Покупатель"""
-    user = models.ForeignKey(User, verbose_name='Покупатель', on_delete=models.CASCADE)
+    """
+    Модель Покупатель
+    """
+    user = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE,
+        verbose_name='Покупатель', 
+        )
 
     phone = models.CharField(max_length=20, verbose_name='Нормер телефона')
     address = models.CharField(max_length=255, verbose_name='Адрес')
@@ -133,15 +155,3 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.user.username
-
-    def check_photo_profile(self) -> bool:
-        """Проверят наличие фото в базе, возвращает True или False"""
-        if self.image == None:
-            return False
-
-
-class Client(models.Model):
-    ip = models.GenericIPAddressField(verbose_name='IP-адрес')
-    refer = models.TextField(verbose_name='Рефер')
-    user_agent = models.TextField(verbose_name='User-агент')
-    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата')

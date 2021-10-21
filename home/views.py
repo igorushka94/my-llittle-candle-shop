@@ -1,8 +1,6 @@
-from datetime import datetime
 from django.views import View
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
-from django.http import JsonResponse, HttpRequest
 from django.core.serializers import serialize
 from django.contrib.auth.models import User
 from django.views.generic.detail import DetailView
@@ -77,44 +75,78 @@ def show_candle(request):
 
 def show_candleholder(request):
 	"""Отображает страницу подсвечников, в фильтре категория по id=2(подсвечники) таблицы Category"""
+	if request.is_ajax():
+		print('это аякс')
 	count = 0
-	print(request.is_ajax())
-	products = Product.objects.filter(category=2)[:4]
+	products = Product.objects.filter(category=2)
 	count += len(products)
 	context = {'products': products}
 	return render(request, 'home/candleholder.html', context=context)
 
 
+class DynamicProductsLoad(View):
+
+	@staticmethod
+	def get(request, *args, **kwargs):
+		last_product_id = request.GET.get('lastProductId')
+		a = Category.objects.filter(name__iexact='Подсвечники').select_related('product')
+		more_products = Product.objects.filter(id__gt=last_product_id).values('id', 'title', 'description', 'price')[:2]
+		if not more_products:
+			return JsonResponse({'data': False})
+		data = []
+		for product in more_products:
+			obj = {
+				'id': product['id'],
+				'title': product['title'],
+				'description': product['description'],
+				'price': product['price'],
+			}
+			data.append(obj)
+			data[-1]['last_product'] = True
+			return JsonResponse({'data': data})
+
+
+
 def show_wrapper(request):
 	"""Отображает страницу упаковки"""
-	pass
+	wrappers = Product.objects.filter(category=6)
+	context = {'wrappers': wrappers}
+	return render(request, 'home/wrapper.html', context=context)
 
 
 def show_pigment(request):
 	"""Отображает страницу красители"""
-	pass
+	pigments = Product.objects.filter(category=4)
+	context = {'pigments': pigments}
+	return render(request, 'home/pigment.html', context=context)
 
 
-def show_instrumenst(request):
+def show_instrument(request):
 	"""Отображает страницу инструмент"""
-	pass
+	instruments = Product.objects.filter(category=3)
+	context = {'instruments': instruments}
+	return render(request, 'home/instrument.html', context=context)
 
 
 def show_equipment(request):
 	"""Отображает страницу подсвечников, в фильтре категория по id=2(подсвечники) таблицы Category"""
-	pass
+	equipments = Product.objects.filter(category=7)
+	context = {'equipments': equipments}
+	return render(request, 'home/equipment.html', context=context)
 
 
 def show_candle_molds(request):
 	"""Отображает страницу подсвечников, в фильтре категория по id=2(подсвечники) таблицы Category"""
-	pass
+	silicon_molds = Product.objects.filter(category=5)
+	context = {'silicon_molds': silicon_molds}
+	return render(request, 'home/candle_molds.html', context=context)
 
 
 def register(request):
 	""" Обработчик регистрации нового пользователя """
 	#Доработать функционал проверки в БД User недопустимость одинаковых email адресов
 	if request.method == 'POST':
-		user_form = UserRegistrationForm(request.POST)
+		user_form = UserRegistrationForm(request.POST) 
 		if user_form.is_valid():
 			new_user = user_form.save(commit=False) # Создаем нового пользователя, но пока не сохраняем в базу данных.
 			new_user.set_password(user_form.cleaned_data['password']) # Метод set_password() шифрует пароль.
